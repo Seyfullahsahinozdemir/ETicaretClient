@@ -5,6 +5,7 @@ import {MatDialog} from '@angular/material/dialog';
 import { DeleteDialogComponent, DeleteState } from 'src/app/dialogs/delete-dialog/delete-dialog.component';
 import { AlertifyOptions, AlertifyService, MessageType, Position } from 'src/app/services/admin/alertify.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { DialogService } from 'src/app/services/common/dialog.service';
 declare var $: any
 @Directive({
   selector: '[appDelete]'
@@ -16,7 +17,8 @@ export class DeleteDirective {
     private _renderer: Renderer2,
     private httpClientService: HttpClientService,
     public dialog: MatDialog,
-    private alertify: AlertifyService
+    private alertify: AlertifyService,
+    private dialogService: DialogService
   ) 
   { 
     const img: HTMLImageElement = _renderer.createElement("img");
@@ -33,39 +35,43 @@ export class DeleteDirective {
 
   @HostListener("click")
   async onClick() {
-    this.openDialog(async () => {
-      const td: HTMLTableCellElement = this.element.nativeElement;
-      this.httpClientService.delete({
-        controller: this.controller
-      }, this.id).subscribe(data => {
-        $(td.parentElement).fadeOut(1000, ()=> { 
-          this.callback.emit();
-          this.alertify.message("The deletion successful.",{
+    this.dialogService.openDialog({
+      componentType: DeleteDialogComponent,
+      data: DeleteState.Yes,
+      afterClosed: async () => {
+        const td: HTMLTableCellElement = this.element.nativeElement;
+        this.httpClientService.delete({
+          controller: this.controller
+        }, this.id).subscribe(data => {
+          $(td.parentElement).fadeOut(1000, ()=> { 
+            this.callback.emit();
+            this.alertify.message("The deletion successful.",{
+              position: Position.TopRight,
+              dismissOthers: true,
+              messageType: MessageType.Success
+            })
+          });
+        }, (errorResponse: HttpErrorResponse) => {
+          this.alertify.message("The deletion failed.",{
             position: Position.TopRight,
             dismissOthers: true,
-            messageType: MessageType.Success
+            messageType: MessageType.Error
           })
-        });
-      }, (errorResponse: HttpErrorResponse) => {
-        this.alertify.message("The deletion failed.",{
-          position: Position.TopRight,
-          dismissOthers: true,
-          messageType: MessageType.Error
-        })
-      }); 
-    });  
-  }
-
-  openDialog(afterClosed: any): void {
-    const dialogRef = this.dialog.open(DeleteDialogComponent, {
-      width: "250px",
-      data: DeleteState.Yes
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result == DeleteState.Yes) {
-        afterClosed();
+        }); 
       }
     });
   }
+
+  // openDialog(afterClosed: any): void {
+  //   const dialogRef = this.dialog.open(DeleteDialogComponent, {
+  //     width: "250px",
+  //     data: DeleteState.Yes
+  //   });
+
+  //   dialogRef.afterClosed().subscribe(result => {
+  //     if (result == DeleteState.Yes) {
+  //       afterClosed();
+  //     }
+  //   });
+  // }
 }
