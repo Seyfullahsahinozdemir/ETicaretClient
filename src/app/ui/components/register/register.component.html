@@ -1,0 +1,40 @@
+<div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-6">
+        <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)">
+            <div class="mb-3">
+                <label for="nameSurname" class="form-label">Name Surname</label>
+                <input formControlName="nameSurname" type="text" class="form-control" id="nameSurname" [ngClass]="{'is-invalid': submitted && component.nameSurname.errors}">
+                <div class="form-text invalid-feedback" *ngIf="submitted && component.nameSurname.errors?.required">Required Name and Surname</div>
+                <div class="form-text invalid-feedback" *ngIf="submitted && (component.nameSurname.errors?.maxlength || component.nameSurname.errors?.minlength)">Between 3 and 50 characters</div>
+              </div>
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input formControlName="username" type="text" class="form-control" id="username" [ngClass]="{'is-invalid': submitted && component.username.errors}">
+                <div class="form-text invalid-feedback" *ngIf="submitted && component.username.errors?.required">Required Username</div>
+                <div class="form-text invalid-feedback" *ngIf="submitted && (component.username.errors?.maxlength || component.username.errors?.minlength)">Between 7 and 20 characters</div>
+              </div>
+            <div class="mb-3">
+              <label for="email" class="form-label">Email address</label>
+              <input formControlName="email" type="email" class="form-control" id="email" aria-describedby="emailHelp" [ngClass]="{'is-invalid': submitted && component.email.errors}">
+              <div id="emailHelp" class="form-text invalid-feedback" *ngIf="submitted && component.email.errors?.email">Not valid email</div>
+              <div id="emailHelp" class="form-text invalid-feedback" *ngIf="submitted && component.email.errors?.required">Required email</div>
+            </div>
+            <div class="mb-3">
+              <label for="exampleInputPassword1" class="form-label">Password</label>
+              <input formControlName="password" type="password" class="form-control" id="password" [ngClass]="{'is-invalid': submitted && component.password.errors}">
+              <div class="form-text invalid-feedback" *ngIf="submitted && component.password.errors?.required">Required Password</div>
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">Repassword</label>
+                <input formControlName="repassword" type="password" class="form-control" id="repassword" [ngClass]="{'is-invalid': submitted && component.repassword.errors}">
+                <div class="form-text invalid-feedback" *ngIf="submitted && component.repassword.errors?.required">Required Repassword</div>
+                <div class="form-text invalid-feedback" *ngIf="submitted && component.repassword.errors?.confirmPasswordValidator">Password and Repassword not matching.</div>
+              </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+    </div>
+    <div class="col-md-4"></div>
+</div>
+
+

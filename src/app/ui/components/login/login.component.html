@@ -1,0 +1,18 @@
+<div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-6">
+            <div class="mb-3">
+                <label for="username" class="form-label">Username & Email</label>
+                <input #txtUsernameOrEmail formControlName="username" type="text" class="form-control" id="username">
+              </div>
+            <div class="mb-3">
+              <label for="exampleInputPassword1" class="form-label">Password</label>
+              <input #txtPassword formControlName="password" type="password" class="form-control" id="password">
+            </div>
+            <asl-google-signin-button></asl-google-signin-button>
+            <button type="submit" class="btn btn-primary" (click)="login(txtUsernameOrEmail.value, txtPassword.value)">Login</button>
+    </div>
+    <div class="col-md-4"></div>
+</div>
+
+
